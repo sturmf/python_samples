@@ -29,6 +29,14 @@ class MyModel(QObject):
     def item(self):
         return self._item
 
+    @item.setter
+    def item(self, item):
+        print('tryingto set item')
+        if self._item != item:
+            print('item changed to %s' % item.name)
+            self._item = item
+            self.itemChanged.emit()
+
     @pyqtProperty(QQmlListProperty, notify=itemsChanged)
     def items(self):
         print('Query for items')
