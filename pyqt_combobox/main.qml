@@ -39,7 +39,7 @@ ApplicationWindow {
 
         onActivated: {
             console.log('Activated')
-            mymodel.item = mymodel.items[index]
+            mymodel.item = model[index]
         }
 
         onModelChanged: {
