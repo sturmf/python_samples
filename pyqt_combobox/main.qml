@@ -34,7 +34,7 @@ ApplicationWindow {
 
         width: parent.width
 
-        model: mymodel.items // order is important, must be before loading currentIndex
+        model: mymodel.items
         textRole: 'name'
 
         onActivated: {
