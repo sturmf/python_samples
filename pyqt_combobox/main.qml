@@ -31,16 +31,20 @@ ApplicationWindow {
 
     ComboBox {
         id: combo
+
         width: parent.width
+
         model: mymodel.items // order is important, must be before loading currentIndex
-        currentIndex: getCurrentIndex(mymodel.items, mymodel.item)
-        onCurrentIndexChanged: mymodel.item = model[currentIndex]
         textRole: 'name'
-        Component.onCompleted: {
-            combo.modelChanged.connect(modelUpdated)
+
+        onActivated: {
+            console.log('Activated')
+            mymodel.item = mymodel.items[index]
         }
-        function modelUpdated() {
-            console.log('model updated')
+
+        onModelChanged: {
+            console.log('modelChanged')
+            currentIndex = getCurrentIndex(mymodel.items, mymodel.item)
         }
 
     }

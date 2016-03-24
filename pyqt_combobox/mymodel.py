@@ -31,7 +31,7 @@ class MyModel(QObject):
 
     @item.setter
     def item(self, item):
-        print('tryingto set item')
+        print('trying to set item to %s' % item.name)
         if self._item != item:
             print('item changed to %s' % item.name)
             self._item = item
