@@ -31,7 +31,7 @@ ApplicationWindow {
 	
     SortFilterProxyModel {
         id: proxyModel
-        source: mymodel.items
+        source: mymodel
     }
 
     TableView {
