@@ -5,8 +5,6 @@ class SortFilterProxyModel(QSortFilterProxyModel):
 
     def __init__(self, parent):
         super().__init__(parent)
-        #self._m = MyModel(parent)
-        #self.setSourceModel(self._m)
 
     @pyqtProperty(QAbstractItemModel)
     def source (self):
@@ -17,34 +15,17 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         self.setSourceModel(source)
         self._source = source
 
-    @pyqtProperty(QByteArray)
-    def sortRole(self):
-        return self.roleNames().value(QSortFilterProxyModel.sortRole())
-
-    @sortRole.setter
-    def sortRole(self, role):
-        self.setSortRole(self.roleKey(role))
-
-    @pyqtProperty(Qt.SortOrder)
-    def sortOrder(self):
-        return self._sortOrder
-
-    @sortOrder.setter
-    def sortOrder(self, order):
-        self._sortOrder = order
-        self.sort(0, order);
-
-
     def roleKey(self, role):
         roles = self.roleNames()
-        print(roles)
         for key, value in roles.items():
             if value == role:
                 return key
         return -1
 
-    def roleNames(self):
-        return self.sourceModel().roleNames()
+    @pyqtSlot(str, int)
+    def sort(self, role, order):
+        self.setSortRole(self.roleKey(role));
+        super().sort(0, order);
 
 
 class MyItem(QObject):
