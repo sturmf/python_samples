@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt
+from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QVariant, QByteArray, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt
 
 
 class SortFilterProxyModel(QSortFilterProxyModel):
@@ -16,6 +16,35 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     def source (self, source):
         self.setSourceModel(source)
         self._source = source
+
+    @pyqtProperty(QByteArray)
+    def sortRole(self):
+        return self.roleNames().value(QSortFilterProxyModel.sortRole())
+
+    @sortRole.setter
+    def sortRole(self, role):
+        self.setSortRole(self.roleKey(role))
+
+    @pyqtProperty(Qt.SortOrder)
+    def sortOrder(self):
+        return self._sortOrder
+
+    @sortOrder.setter
+    def sortOrder(self, order):
+        self._sortOrder = order
+        self.sort(0, order);
+
+
+    def roleKey(self, role):
+        roles = self.roleNames()
+        print(roles)
+        for key, value in roles.items():
+            if value == role:
+                return key
+        return -1
+
+    def roleNames(self):
+        return self.sourceModel().roleNames()
 
 
 class MyItem(QObject):
