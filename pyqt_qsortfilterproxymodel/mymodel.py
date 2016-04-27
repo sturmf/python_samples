@@ -15,7 +15,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         self.setSourceModel(source)
         self._source = source
 
-    def roleKey(self, role):
+    def _roleKey(self, role):
         roles = self.roleNames()
         for key, value in roles.items():
             if value == role:
@@ -24,7 +24,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
 
     @pyqtSlot(str, int)
     def sort(self, role, order):
-        self.setSortRole(self.roleKey(role));
+        self.setSortRole(self._roleKey(role));
         super().sort(0, order);
 
 
