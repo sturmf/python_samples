@@ -15,23 +15,18 @@ ApplicationWindow {
     MyModel {
         id: mymodel
     }
-	
-    SortFilterProxyModel {
-        id: proxyModel
-        source: mymodel
-        sortOrder: tableView.sortIndicatorOrder
-        //sortCaseSensitivity: Qt.CaseInsensitive
-        sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
-
-    }
 
     TableView {
         id: tableView
         anchors.fill: parent
-        model: proxyModel
+        model: SortFilterProxyModel {
+            id: proxyModel
+            source: mymodel
+            sortOrder: tableView.sortIndicatorOrder
+            //sortCaseSensitivity: Qt.CaseInsensitive
+            sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
+        }
         sortIndicatorVisible: true
-        //onSortIndicatorOrderChanged: model.sort(getColumn(sortIndicatorColumn).role, sortIndicatorOrder)
-        //onSortIndicatorColumnChanged: model.sort(getColumn(sortIndicatorColumn).role, sortIndicatorOrder)
 
         TableViewColumn {
             role: "name"
