@@ -38,7 +38,7 @@ ApplicationWindow {
             sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
 
             filterString: "*" + searchBox.text + "*"
-            filterSyntax: 1 //SortFilterProxyModel.Wildcard
+            filterSyntax: SortFilterProxyModel.Wildcard
             filterCaseSensitivity: Qt.CaseInsensitive
             filterRole: tableView.getColumn(tableView.sortIndicatorColumn).role
 

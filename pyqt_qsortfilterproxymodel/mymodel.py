@@ -1,7 +1,12 @@
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QVariant, QByteArray, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt, QRegExp
+from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, Q_ENUMS, QVariant, QByteArray, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt, QRegExp
 
 
 class SortFilterProxyModel(QSortFilterProxyModel):
+
+    class FilterSyntax:
+        RegExp, Wildcard, FixedString = range(3)
+
+    Q_ENUMS(FilterSyntax)
 
     def __init__(self, parent):
         super().__init__(parent)
