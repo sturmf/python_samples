@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QVariant, QByteArray, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt
+from PyQt5.QtCore import pyqtProperty, pyqtSignal, pyqtSlot, QObject, QVariant, QByteArray, QSortFilterProxyModel, QAbstractItemModel, QAbstractListModel, QModelIndex, Qt, QRegExp
 
 
 class SortFilterProxyModel(QSortFilterProxyModel):
@@ -31,6 +31,51 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     def sortRole(self, role):
         super().setSortRole(self._roleKey(role))
 
+    @pyqtProperty(QByteArray)
+    def filterRole(self):
+        return self._roleNames().get(super().filterRole())
+
+    @filterRole.setter
+    def filterRole(self, role):
+        super().setFilterRole(self._roleKey(role))
+
+    @pyqtProperty(str)
+    def filterString(self):
+        return super().filterRegExp().pattern();
+
+    @filterString.setter
+    def filterString(self, filter):
+        super().setFilterRegExp(QRegExp(filter, super().filterCaseSensitivity(), self.filterSyntax))
+
+    @pyqtProperty(int)
+    def filterSyntax(self):
+        return super().filterRegExp().patternSyntax()
+
+    @filterSyntax.setter
+    def filterSyntax(self, syntax):
+        super().setFilterRegExp(QRegExp(self.filterString, super().filterCaseSensitivity(), syntax))
+
+    def filterAcceptsRow(self, sourceRow, sourceParent):
+        rx = super().filterRegExp()
+        if not rx or rx.isEmpty():
+            return True
+        model = super().sourceModel();
+        if not self.filterRole or self.filterRole.isEmpty():
+            roles = self._roleNames();
+            for key, value in roles.items():
+                sourceIndex = model.index(sourceRow, 0, sourceParent)
+                mkey = model.data(sourceIndex, key)
+                if rx.indexIn(mkey) != -1:
+                    return True
+            return False
+
+        sourceIndex = model.index(sourceRow, 0, sourceParent)
+        if not sourceIndex.isValid():
+            return True;
+        mkey = model.data(sourceIndex, self._roleKey(self.filterRole()))
+        return rx.indexIn(mkey) != -1
+
+
     def _roleKey(self, role):
         roles = self.roleNames()
         for key, value in roles.items():
@@ -38,7 +83,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
                 return key
         return -1
 
-    def _roleNames():
+    def _roleNames(self):
         source = super().sourceModel()
         if source:
             return source.roleNames()
@@ -63,21 +108,17 @@ class MyModel(QAbstractListModel):
     _roles = {NameRole: "name"}
 
     def __init__(self, parent=None):
-        print("constructing")
         super().__init__(parent)
         self._items = [MyItem('one'), MyItem('two'), MyItem('three')]
         self._column_count = 1
 
     def roleNames(self):
-        print("roleNames")
         return self._roles
 
     def rowCount(self, parent=QModelIndex()):
-        print("rowCount", len(self._items))
         return len(self._items)
 
     def data(self, index, role=Qt.DisplayRole):
-        print("in data")
         try:
             item = self._items[index.row()]
         except IndexError:

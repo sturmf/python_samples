@@ -8,9 +8,20 @@ import SortFilterProxyModel 1.0
 
 ApplicationWindow {
 
-    id: mainWindow
+    id: window
     width: 800; height: 600
     color: "gray"
+
+    toolBar: ToolBar {
+        TextField {
+            id: searchBox
+
+            width: window.width / 3
+            placeholderText: qsTr("Search...")
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+        }
+    }
 
     MyModel {
         id: mymodel
@@ -23,8 +34,12 @@ ApplicationWindow {
             id: proxyModel
             source: mymodel
             sortOrder: tableView.sortIndicatorOrder
-            //sortCaseSensitivity: Qt.CaseInsensitive
+            sortCaseSensitivity: Qt.CaseInsensitive
             sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
+
+            filterString: "*" + searchBox.text + "*"
+            filterSyntax: 1 //SortFilterProxyModel.Wildcard
+            filterCaseSensitivity: Qt.CaseInsensitive
         }
         sortIndicatorVisible: true
 
