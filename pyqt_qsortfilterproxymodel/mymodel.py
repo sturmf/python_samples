@@ -7,11 +7,11 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         super().__init__(parent)
 
     @pyqtProperty(QAbstractItemModel)
-    def source (self):
+    def source(self):
         return super().sourceModel()
 
     @source.setter
-    def source (self, source):
+    def source(self, source):
         self.setSourceModel(source)
 
     @pyqtProperty(int)
@@ -21,7 +21,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     @sortOrder.setter
     def sortOrder(self, order):
         self._order = order
-        super().sort(0, order);
+        super().sort(0, order)
 
     @pyqtProperty(QByteArray)
     def sortRole(self):
@@ -41,7 +41,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
 
     @pyqtProperty(str)
     def filterString(self):
-        return super().filterRegExp().pattern();
+        return super().filterRegExp().pattern()
 
     @filterString.setter
     def filterString(self, filter):
@@ -63,20 +63,18 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         sourceIndex = model.index(sourceRow, 0, sourceParent)
         # skip invalid indexes
         if not sourceIndex.isValid():
-            return True;
-
+            return True
         # If no filterRole is set, iterate through all keys
-        if not self.filterRole or self.filterRole.isEmpty():
+        if not self.filterRole or self.filterRole == "":
             roles = self._roleNames()
             for key, value in roles.items():
                 data = model.data(sourceIndex, key)
                 if rx.indexIn(data) != -1:
                     return True
             return False
-
+        # Here we have a filterRole so only search in that
         data = model.data(sourceIndex, self._roleKey(self.filterRole))
         return rx.indexIn(data) != -1
-
 
     def _roleKey(self, role):
         roles = self.roleNames()
