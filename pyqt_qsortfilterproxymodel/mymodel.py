@@ -25,7 +25,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
 
     @pyqtProperty(QByteArray)
     def sortRole(self):
-        return self._roleNames()[super().sortRole()]
+        return self._roleNames().get(super().sortRole())
 
     @sortRole.setter
     def sortRole(self, role):
@@ -59,21 +59,23 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         rx = super().filterRegExp()
         if not rx or rx.isEmpty():
             return True
-        model = super().sourceModel();
+        model = super().sourceModel()
+        sourceIndex = model.index(sourceRow, 0, sourceParent)
+        # skip invalid indexes
+        if not sourceIndex.isValid():
+            return True;
+
+        # If no filterRole is set, iterate through all keys
         if not self.filterRole or self.filterRole.isEmpty():
-            roles = self._roleNames();
+            roles = self._roleNames()
             for key, value in roles.items():
-                sourceIndex = model.index(sourceRow, 0, sourceParent)
-                mkey = model.data(sourceIndex, key)
-                if rx.indexIn(mkey) != -1:
+                data = model.data(sourceIndex, key)
+                if rx.indexIn(data) != -1:
                     return True
             return False
 
-        sourceIndex = model.index(sourceRow, 0, sourceParent)
-        if not sourceIndex.isValid():
-            return True;
-        mkey = model.data(sourceIndex, self._roleKey(self.filterRole()))
-        return rx.indexIn(mkey) != -1
+        data = model.data(sourceIndex, self._roleKey(self.filterRole))
+        return rx.indexIn(data) != -1
 
 
     def _roleKey(self, role):
