@@ -2,7 +2,8 @@ import os
 import sys
 
 from PyQt5 import QtCore, QtQml, QtWidgets
-from mymodel import MyModel, MyItem, SortFilterProxyModel
+from sortfilterproxymodel import SortFilterProxyModel
+from mymodel import MyModel, MyItem
 
 osname = os.name.lower()
 sysplatform = sys.platform.lower()
