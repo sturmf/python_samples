@@ -48,7 +48,7 @@ ApplicationWindow {
         TableViewColumn {
             delegate: Component {
                 Text {
-                    text: tableView.model.get(styleData.row).name
+                    text: styleData.value.name
                 }
             }
             role: "object"
