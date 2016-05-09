@@ -35,18 +35,23 @@ ApplicationWindow {
             source: mymodel
             sortOrder: tableView.sortIndicatorOrder
             sortCaseSensitivity: Qt.CaseInsensitive
-            sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
+            sortRole: "name"
 
             filterString: "*" + searchBox.text + "*"
             filterSyntax: SortFilterProxyModel.Wildcard
             filterCaseSensitivity: Qt.CaseInsensitive
-            filterRole: tableView.getColumn(tableView.sortIndicatorColumn).role
+            filterRole: "name"
 
         }
         sortIndicatorVisible: true
 
         TableViewColumn {
-            role: "name"
+            delegate: Component {
+                Text {
+                    text: tableView.model.get(styleData.row).name
+                }
+            }
+            role: "object"
             title: "Name"
         }
     }

@@ -1,5 +1,5 @@
-from PyQt5.QtCore import pyqtProperty, QSortFilterProxyModel, Q_ENUMS, QAbstractItemModel, QByteArray, QRegExp
-
+from PyQt5.QtCore import pyqtProperty, pyqtSlot, QSortFilterProxyModel, Q_ENUMS, QAbstractItemModel, QByteArray, QRegExp
+from mymodel import MyItem
 
 class SortFilterProxyModel(QSortFilterProxyModel):
 
@@ -30,18 +30,22 @@ class SortFilterProxyModel(QSortFilterProxyModel):
 
     @pyqtProperty(QByteArray)
     def sortRole(self):
-        return self._roleNames().get(super().sortRole())
+        return self._sortRole
+        #return self._roleNames().get(super().sortRole())
 
     @sortRole.setter
     def sortRole(self, role):
+        self._sortRole = role
         super().setSortRole(self._roleKey(role))
 
     @pyqtProperty(QByteArray)
     def filterRole(self):
-        return self._roleNames().get(super().filterRole())
+        return self._filterRole
+        #return self._roleNames().get(super().filterRole())
 
     @filterRole.setter
     def filterRole(self, role):
+        self._filterRole = role
         super().setFilterRole(self._roleKey(role))
 
     @pyqtProperty(str)
@@ -74,15 +78,15 @@ class SortFilterProxyModel(QSortFilterProxyModel):
             roles = self._roleNames()
             for key, value in roles.items():
                 data = model.data(sourceIndex, key)
-                if rx.indexIn(data) != -1:
+                if rx.indexIn(str(data)) != -1:
                     return True
             return False
         # Here we have a filterRole so only search in that
         data = model.data(sourceIndex, self._roleKey(self.filterRole))
-        return rx.indexIn(data) != -1
+        return rx.indexIn(str(data)) != -1
 
     def _roleKey(self, role):
-        roles = self.roleNames()
+        roles = self._roleNames()
         for key, value in roles.items():
             if value == role:
                 return key
@@ -94,3 +98,6 @@ class SortFilterProxyModel(QSortFilterProxyModel):
             return source.roleNames()
         return {}
 
+    @pyqtSlot(int, result=MyItem)
+    def get(self, i):
+        return self.source.get(i)

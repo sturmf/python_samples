@@ -15,7 +15,11 @@ class MyItem(QObject):
 
 class MyModel(QAbstractListModel):
     NameRole = Qt.UserRole + 1
-    _roles = {NameRole: "name"}
+    ObjectRole = Qt.UserRole + 2
+    _roles = {
+        NameRole: "name",
+        ObjectRole: "object",
+    }
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -34,7 +38,12 @@ class MyModel(QAbstractListModel):
         except IndexError:
             return QVariant()
 
-        if role == self.NameRole:
+        if   role == self.NameRole:
             return item.name
+        elif role == self.ObjectRole:
+            return item
 
         return QVariant()
+
+    def get(self, i):
+        return self._items[i]
