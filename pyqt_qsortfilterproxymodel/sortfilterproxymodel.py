@@ -9,6 +9,8 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     Q_ENUMS(FilterSyntax)
 
     def __init__(self, parent):
+        self._sortRole = None
+        self._filterRole = None
         super().__init__(parent)
 
     @pyqtProperty(QAbstractItemModel)
@@ -18,6 +20,12 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     @source.setter
     def source(self, source):
         self.setSourceModel(source)
+        # The sort and filter roles might have been set before the source itself
+        # in that case we have to set them again
+        if self._sortRole:
+          self.sortRole = self._sortRole
+        if self._filterRole:
+          self.filterRole = self._filterRole
 
     @pyqtProperty(int)
     def sortOrder(self):
@@ -31,7 +39,6 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     @pyqtProperty(QByteArray)
     def sortRole(self):
         return self._sortRole
-        #return self._roleNames().get(super().sortRole())
 
     @sortRole.setter
     def sortRole(self, role):
@@ -41,7 +48,6 @@ class SortFilterProxyModel(QSortFilterProxyModel):
     @pyqtProperty(QByteArray)
     def filterRole(self):
         return self._filterRole
-        #return self._roleNames().get(super().filterRole())
 
     @filterRole.setter
     def filterRole(self, role):
@@ -75,7 +81,7 @@ class SortFilterProxyModel(QSortFilterProxyModel):
             return True
         # If no filterRole is set, iterate through all keys
         if not self.filterRole or self.filterRole == "":
-            roles = self._roleNames()
+            roles = self.roleNames()
             for key, value in roles.items():
                 data = model.data(sourceIndex, key)
                 if rx.indexIn(str(data)) != -1:
@@ -86,18 +92,15 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         return rx.indexIn(str(data)) != -1
 
     def _roleKey(self, role):
-        roles = self._roleNames()
+        roles = self.roleNames()
         for key, value in roles.items():
             if value == role:
                 return key
         return -1
 
-    def _roleNames(self):
+    def roleNames(self):
         source = super().sourceModel()
         if source:
             return source.roleNames()
         return {}
 
-    @pyqtSlot(int, result=MyItem)
-    def get(self, i):
-        return self.source.get(i)

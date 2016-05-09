@@ -45,5 +45,3 @@ class MyModel(QAbstractListModel):
 
         return QVariant()
 
-    def get(self, i):
-        return self._items[i]

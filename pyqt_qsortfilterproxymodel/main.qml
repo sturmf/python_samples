@@ -46,10 +46,8 @@ ApplicationWindow {
         sortIndicatorVisible: true
 
         TableViewColumn {
-            delegate: Component {
-                Text {
-                    text: styleData.value.name
-                }
+            delegate: Text {
+                text: styleData.value ? styleData.value.name : ""
             }
             role: "object"
             title: "Name"
