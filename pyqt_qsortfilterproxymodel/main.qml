@@ -33,6 +33,7 @@ ApplicationWindow {
         model: SortFilterProxyModel {
             id: proxyModel
             source: mymodel
+
             sortOrder: tableView.sortIndicatorOrder
             sortCaseSensitivity: Qt.CaseInsensitive
             sortRole: "name"

@@ -1,5 +1,4 @@
 from PyQt5.QtCore import pyqtProperty, pyqtSlot, QSortFilterProxyModel, Q_ENUMS, QAbstractItemModel, QByteArray, QRegExp
-from mymodel import MyItem
 
 class SortFilterProxyModel(QSortFilterProxyModel):
 
