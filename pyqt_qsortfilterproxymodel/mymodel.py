@@ -14,8 +14,8 @@ class MyItem(QObject):
 
 
 class MyModel(QAbstractListModel):
-    NameRole = Qt.UserRole + 1
-    ObjectRole = Qt.UserRole + 2
+    ObjectRole = Qt.UserRole + 1 # We always want a way to access the underlying object
+    NameRole = Qt.UserRole + 2
     _roles = {
         NameRole: "name",
         ObjectRole: "object",
@@ -27,7 +27,9 @@ class MyModel(QAbstractListModel):
         self._column_count = 1
 
     def roleNames(self):
-        return self._roles
+        _roles = super().roleNames()
+        _roles.update(self._roles)
+        return _roles
 
     def rowCount(self, parent=QModelIndex()):
         return len(self._items)

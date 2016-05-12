@@ -53,6 +53,9 @@ ApplicationWindow {
             role: "object"
             title: "Name"
         }
+        onActivated: {
+            console.log("Row clicked: " + model.item(row, 0).name)
+        }
     }
 
 }
