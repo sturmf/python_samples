@@ -12,11 +12,11 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         self._filterRole = None
         super().__init__(parent)
 
-    @pyqtSlot(int, int, result=QObject)
-    def item(self, row, column):
+    @pyqtSlot(int, int, str, result=QObject)
+    def item(self, row, column, role):
         proxyIndex = super().index(row, column)
-        sourceIndex = super().mapToSource(proxyIndex)
-        return super().sourceModel().data(sourceIndex, self._roleKey('object'))
+        return super().data(proxyIndex, self._roleKey(role))
+
 
     @pyqtProperty(QAbstractItemModel)
     def source(self):

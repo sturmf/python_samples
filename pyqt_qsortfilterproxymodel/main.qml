@@ -36,25 +36,22 @@ ApplicationWindow {
 
             sortOrder: tableView.sortIndicatorOrder
             sortCaseSensitivity: Qt.CaseInsensitive
-            sortRole: "name"
+            sortRole: tableView.getColumn(tableView.sortIndicatorColumn).role
 
             filterString: "*" + searchBox.text + "*"
             filterSyntax: SortFilterProxyModel.Wildcard
             filterCaseSensitivity: Qt.CaseInsensitive
-            filterRole: "name"
+            filterRole: tableView.getColumn(tableView.sortIndicatorColumn).role
 
         }
         sortIndicatorVisible: true
 
         TableViewColumn {
-            delegate: Text {
-                text: styleData.value ? styleData.value.name : ""
-            }
-            role: "object"
+            role: "name"
             title: "Name"
         }
         onActivated: {
-            console.log("Row clicked: " + model.item(row, 0).name)
+            console.log("Row clicked: " + model.item(row, 0, 'object').name)
         }
     }
 
