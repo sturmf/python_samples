@@ -12,6 +12,8 @@ ApplicationWindow {
     width: 800; height: 600
     color: "gray"
 
+    property var qt_UserRole: 256 // FIXME: Qt.UserRole is not exported
+
     toolBar: ToolBar {
         TextField {
             id: searchBox
@@ -51,7 +53,9 @@ ApplicationWindow {
             title: "Name"
         }
         onActivated: {
-            console.log("Row clicked: " + model.item(row, 0, 'object').name)
+            // Two ways of accessing the activated item
+            console.log("Row clicked: " + model.item(row, 0).name)
+            console.log("Row clicked: " + model.data(model.index(row, 0), qt_UserRole + 1).name)
         }
     }
 

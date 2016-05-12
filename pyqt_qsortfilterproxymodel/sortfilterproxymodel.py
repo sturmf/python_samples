@@ -1,4 +1,4 @@
-from PyQt5.QtCore import pyqtProperty, pyqtSlot, QSortFilterProxyModel, Q_ENUMS, QAbstractItemModel, QByteArray, QRegExp, QObject
+from PyQt5.QtCore import pyqtProperty, pyqtSlot, QSortFilterProxyModel, Q_ENUMS, QAbstractItemModel, QByteArray, QRegExp, QObject, QModelIndex, QVariant, Qt
 
 class SortFilterProxyModel(QSortFilterProxyModel):
 
@@ -12,11 +12,20 @@ class SortFilterProxyModel(QSortFilterProxyModel):
         self._filterRole = None
         super().__init__(parent)
 
+    @pyqtSlot(int, int, result=QObject)
     @pyqtSlot(int, int, str, result=QObject)
-    def item(self, row, column, role):
+    def item(self, row, column, role='object'):
         proxyIndex = super().index(row, column)
         return super().data(proxyIndex, self._roleKey(role))
 
+    @pyqtSlot(int, int, result=QModelIndex)
+    @pyqtSlot(int, int, QModelIndex, result=QModelIndex)
+    def index(self, row, column, parent=QModelIndex()):
+        return super().index(row, column, parent)
+
+    @pyqtSlot(QModelIndex, int, result=QVariant)
+    def data(self, index, role=Qt.DisplayRole):
+        return super().data(index, role)
 
     @pyqtProperty(QAbstractItemModel)
     def source(self):
