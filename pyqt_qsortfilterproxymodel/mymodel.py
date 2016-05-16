@@ -24,7 +24,6 @@ class MyModel(QAbstractListModel):
     def __init__(self, parent=None):
         super().__init__(parent)
         self._items = [MyItem('one'), MyItem('two'), MyItem('three')]
-        self._column_count = 1
 
     def roleNames(self):
         _roles = super().roleNames()
