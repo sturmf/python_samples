@@ -17,7 +17,7 @@ class MyItem(QObject):
 class MyModel(QAbstractListModel):
     NameRole = Qt.UserRole + 1
     _roles = {
-        NameRole: "name",
+        NameRole: b"name",
     }
 
     itemChanged = pyqtSignal()
