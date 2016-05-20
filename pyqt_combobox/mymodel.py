@@ -22,7 +22,7 @@ class MyModel(QObject):
 
     def __init__(self, parent=None):
         QObject.__init__(self, parent)
-        self._items = [MyItem('one'), MyItem('two'), MyItem('three')]
+        self._items = [MyItem('one', self), MyItem('two', self), MyItem('three', self)]
         self._item = self._items[2]
 
     @pyqtProperty(MyItem, notify=itemChanged)
