@@ -23,7 +23,7 @@ class MyModel(QAbstractListModel):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._items = [MyItem('one'), MyItem('two'), MyItem('three')]
+        self._items = [MyItem('one', self), MyItem('two', self), MyItem('three', self)]
 
     def roleNames(self):
         _roles = super().roleNames()
