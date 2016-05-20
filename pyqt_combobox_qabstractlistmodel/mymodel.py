@@ -54,7 +54,7 @@ class MyModel(QAbstractListModel):
     def new_item(self):
         print('Append new item')
         super().beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
-        self._items.append(MyItem('new'))
+        self._items.append(MyItem('new', self))
         super().endInsertRows()
 
     @pyqtSlot(int, result=MyItem)
