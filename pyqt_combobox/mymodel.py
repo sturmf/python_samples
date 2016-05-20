@@ -45,5 +45,5 @@ class MyModel(QObject):
     @pyqtSlot()
     def new_item(self):
         print('Append new item')
-        self._items.append(MyItem('new'))
+        self._items.append(MyItem('new', self))
         self.itemsChanged.emit()
