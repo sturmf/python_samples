@@ -17,8 +17,8 @@ class MyModel(QAbstractListModel):
     ObjectRole = Qt.UserRole + 1 # We always want a way to access the underlying object
     NameRole = Qt.UserRole + 2
     _roles = {
-        NameRole: "name",
-        ObjectRole: "object",
+        NameRole: b"name",
+        ObjectRole: b"object",
     }
 
     def __init__(self, parent=None):
